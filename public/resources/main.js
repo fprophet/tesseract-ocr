@@ -10,13 +10,32 @@ function pageEvents() {
   const options = $(".options-toggle");
   options ? options.addEventListener("click", _toggleOptions) : null;
 
-  const upload_button = $("#file-button");
-  upload_button
-    ? upload_button.addEventListener("click", _toggleFileButton)
-    : null;
-
   const file_input = $("input[type=file]");
-  file_input ? file_input.addEventListener("change", _toggleFileLoad) : null;
+  file_input ? file_input.addEventListener("change", _handleFileUpload) : null;
+
+  const start_process = $(".start-process");
+  start_process
+    ? start_process.addEventListener("click", _handleStartProcess)
+    : null;
+}
+
+function checkFileInput() {
+  const input = $("input[type=file]");
+  if (!input.files || input.files.length > 1) {
+    return false;
+  }
+
+  return true;
+}
+
+function uploadRequest() {
+  const form_data = new FormData();
+  const file = $("input[type=file]").files[0];
+  form_data.append("file", file);
+  return fetch("/upload.php", {
+    method: "POST",
+    body: form_data,
+  });
 }
 
 function _toggleOptions() {
@@ -28,7 +47,7 @@ function _toggleOptions() {
   }
 }
 
-function _toggleFileLoad(event) {
+function _handleFileUpload(event) {
   const files = event.target.files;
   if (!files || files.length > 1) {
     return false;
@@ -46,13 +65,15 @@ function _toggleFileLoad(event) {
   $(".preview-name").innerHTML = `Your file: <b>${files[0].name}</b>`;
 }
 
-function _toggleFileButton() {
-  const input = $("input[type=file]");
-  if (!input) {
+function _handleStartProcess() {
+  if (!checkFileInput()) {
+    window.alert("Please select a file first!");
     return false;
   }
 
-  input.click();
+  uploadRequest()
+    .then((res) => res.json())
+    .then((res) => console.log(res));
 }
 
 pageEvents();

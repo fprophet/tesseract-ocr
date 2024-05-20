@@ -25,7 +25,7 @@
                         <input type="file" id="upload" class=upload-input>
                     </div>
                     <div class="buttons-holder">
-                        <label class="btn" name="file-button" id="file-button" >Upload file</label>
+                        <label class="btn" for="upload" name="file-button" id="file-button" >Upload file</label>
                         <i class="options-toggle fa-solid fa-gear"></i>
                     </div>
                     <div class="options-wrapper">
@@ -43,8 +43,8 @@
                         </div>
                     </div>
 
+                    <button class="start-process">Start Process</button>               
                 </div>
-               
             </div>
 
             <div id="image-preview">

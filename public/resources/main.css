@@ -125,7 +125,14 @@ footer {
   opacity: 0;
   display: none;
 }
-
+.start-process {
+  padding: 15px;
+  background-color: green;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  font-size: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
 .btn {
   display: flex;
   align-items: center;
