@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tesseract OCR</title>
+    <link rel="stylesheet" href="/resources/main.css?v=" <?="time()?" />
+    >
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <header>
+      <div id="image-holder">
+        <img width="120" src="/resources/images/logo-image.jpg" alt="" />
+        <span>Tesseract OCR</span>
+      </div>
+      <div id="nav-list"></div>
+    </header>
+
+    <section id="main">
+      <div id="upload-section">
+        <div id="input-section">
+          <div class="file-input-wrapper">
+            <div class="dropzone" data-text="Select your file!">
+              <img
+                src="http://100dayscss.com/codepen/upload.svg"
+                class="upload-icon"
+              />
+              <input type="file" id="upload" class="upload-input" />
+            </div>
+            <div class="buttons-holder">
+              <button type="button" class="btn" name="uploadbutton">
+                Upload file
+              </button>
+              <i class="fa-solid fa-gear"></i>
+            </div>
+            <div class="options-wrapper">
+              <div class="input-group">
+                <label for="process-image">Pre Process Image</label>
+                <input
+                  type="checkbox"
+                  name="process-image"
+                  id="process-image"
+                />
+              </div>
+              <div class="input-group">
+                <label for="deskew">Deskew</label>
+                <input type="checkbox" name="deskew" id="deskew" />
+              </div>
+              <div class="input-group">
+                <label for="process-image">Process Image</label>
+                <input
+                  type="checkbox"
+                  name="process-image"
+                  id="process-image"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="image-preview">
+          <div class="preview-holder"></div>
+        </div>
+        <div id="processed-images-preview"></div>
+      </div>
+    </section>
+
+    <footer></footer>
+  </body>
+</html>
