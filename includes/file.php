@@ -17,12 +17,9 @@ class File{
     }
 
     public function move_file(){
-        echo($this->save_path . "/" . $this->name );
-            var_dump($this);
         if( !move_uploaded_file( $this->tmp, $this->save_path . "/" . $this->name ) ){
             return false;
         }
-
         return true;
     }
 

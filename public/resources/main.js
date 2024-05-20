@@ -38,6 +38,13 @@ function uploadRequest() {
   });
 }
 
+function processRequest(file) {
+  return fetch("/ocr.php", {
+    method: "POST",
+    body: JSON.stringify({ file: file }),
+  });
+}
+
 function _toggleOptions() {
   const wrapper = $(".options-wrapper");
   if (wrapper.style.maxHeight == "0px" || wrapper.style.maxHeight === "") {
@@ -73,7 +80,12 @@ function _handleStartProcess() {
 
   uploadRequest()
     .then((res) => res.json())
-    .then((res) => console.log(res));
+    .then((res) => {
+      if (res.status == "success") {
+        processRequest(res.file);
+        // console.log(res);
+      }
+    });
 }
 
 pageEvents();

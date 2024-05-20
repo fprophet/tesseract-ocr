@@ -7,7 +7,7 @@ if( $_FILES && isset($_FILES["file"])){
     if( !$file->move_file()){
         echo json_encode(["status"=> "fail","message"=> "Problems in uploading file!"]);
     }else{
-        echo json_encode(["status"=> "success","message"=> "File Uploaded!"]);
+        echo json_encode(["status"=> "success","message"=> "File Uploaded!", "file" => $file->name]);
     }
 }
 ?>
