@@ -1,0 +1,72 @@
+html{
+    height: 100%;
+}
+body{
+    margin:0;
+    min-height: 100%;
+    /* background-color: red; */
+    display: flex;
+    flex-direction: column;
+}
+header{
+    flex:1;
+    display: flex;
+    max-height: 150px;
+    align-items:center;
+    background: rgb(45,131,146);
+    background: linear-gradient(90deg, rgba(45,131,146,1) 10%, rgba(218,247,252,1) 70%, rgba(255,255,255,1) 100%);
+}
+header #image-holder{
+    margin-left:50px;
+    display: flex;
+    align-items: center;
+}
+header #image-holder span{
+    margin-left:10px;
+    font-size:35px;
+}
+header #image-holder img{
+    border-radius: 60px;
+
+    border:3px solid white
+}
+section#main{
+    flex:3;
+    border:1px solid red;
+    display: flex;
+    flex-wrap: wrap;
+}
+footer{
+    flex:1;
+}
+#upload-section{
+    flex:1;
+    display:flex;
+    
+}
+#input-wrapper{
+    flex:1;
+    border:1px solid red;
+
+}
+#image-preview{
+    flex:2;
+    border:1px solid blue;
+}
+#processed-images-preview{
+    border:1px solid green;
+    width:100%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
