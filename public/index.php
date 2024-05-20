@@ -25,8 +25,8 @@
                         <input type="file" id="upload" class=upload-input>
                     </div>
                     <div class="buttons-holder">
-                        <button type="button" class="btn" name="uploadbutton">Upload file</button>
-                        <i class="fa-solid fa-gear"></i>
+                        <label class="btn" name="file-button" id="file-button" >Upload file</label>
+                        <i class="options-toggle fa-solid fa-gear"></i>
                     </div>
                     <div class="options-wrapper">
                         <div class="input-group">
@@ -62,8 +62,9 @@
                             "Start process". In real time the pre procesed image is displayed in it's current state.
                         </p>
                 </div>
-                <div class="preview-holder" style="display:none">
-                    
+                <div class="preview-holder" >
+                    <span class="preview-name"></span>
+                    <img class="upload-preview" src="#" alt="">
                 </div>
             </div>
           
@@ -79,5 +80,6 @@
     </section>
     
     <footer></footer>
+    <script src="/resources/main.js"></script>
 </body>
 </html>
