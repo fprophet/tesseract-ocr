@@ -70,6 +70,12 @@
           
         </div>
         <hr/>
+        <div id="output-wrapper">
+            <div id="output-text">
+
+            </div>
+        </div>
+        <hr>
         <div id="processed-images-preview">
             <!-- <div class="processed-image-preview"></div> -->
             <!-- <div class="processed-image-preview"></div> -->
@@ -80,6 +86,6 @@
     </section>
     
     <footer></footer>
-    <script src="/resources/main.js"></script>
+    <script src="/resources/main.js?v=" <?= time()?>></script>
 </body>
 </html>

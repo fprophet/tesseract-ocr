@@ -112,7 +112,7 @@ function updateData() {
     .then((res) => res.json())
     .then((res) => {
       if (res["status"] !== "empty") {
-        console.log(res);
+        $("#output-text").innerHTML += res["data"] + "<br/>";
       }
 
       if (interval) {
