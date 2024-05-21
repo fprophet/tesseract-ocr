@@ -1,3 +1,5 @@
+let interval = false;
+
 function $(selector, all = false) {
   if (all) {
     return document.querySelectorAll(selector);
@@ -82,8 +84,39 @@ function _handleStartProcess() {
     .then((res) => res.json())
     .then((res) => {
       if (res.status == "success") {
-        processRequest(res.file);
+        interval = true;
+        updateData();
+        processRequest(res.file)
+          .then((res) => res.json())
+          .then((res) => {
+            interval = false;
+          });
         // console.log(res);
+      }
+    });
+}
+
+function udpateDatax() {
+  interval = 100;
+  let udpdate = setInterval(function () {
+    if (!interval) {
+      clearInterval(update);
+    }
+  }, interval);
+}
+
+function updateData() {
+  fetch("/progress.php?progress=process", {
+    mehtod: "GET",
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      if (res["status"] !== "empty") {
+        console.log(res);
+      }
+
+      if (interval) {
+        updateData();
       }
     });
 }

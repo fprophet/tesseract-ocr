@@ -85,6 +85,14 @@ class Log {
         fclose($handle);
     }
 
+    public function clear_contents(){
+        $handle = fopen(static::$log_dir . $this->file_name, 'w');
+        // echo var_dump($dir);
+        // die();
+        fwrite($handle, "");
+        fclose($handle);
+    }
+    
     public function page_entries() {
         $to_show = 1000;
         $to_cut = count(file($this->path)) - $to_show;

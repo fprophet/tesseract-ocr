@@ -1,15 +1,21 @@
-May 20, 2024, 2:08 pm|
-Command: ./ocr 
+May 21, 2024, 4:37 pm|Process line:: SUNT AICI: 0
 
-Response
-: This is a lot of 12 point text to test the
-ocr code and see if it works on all types
-of file format.
+May 21, 2024, 4:37 pm|Process line:: SUNT AICI: 1
 
-The quick brown dog jumped over the
-lazy fox. The quick brown dog jumped
-over the lazy fox. The quick brown dog
-jumped over the lazy fox. The quick
-brown dog jumped over the lazy fox.
+May 21, 2024, 4:37 pm|Process line:: SUNT AICI: 2
 
-######################################################################################################################################################
+May 21, 2024, 4:37 pm|Process line:: SUNT AICI: 3
+
+May 21, 2024, 4:37 pm|Process line:: SUNT AICI: 4
+
+May 21, 2024, 4:37 pm|Process line:: SUNT AICI: 5
+
+May 21, 2024, 4:37 pm|Process line:: SUNT AICI: 6
+
+May 21, 2024, 4:37 pm|Process line:: SUNT AICI: 7
+
+May 21, 2024, 4:38 pm|Process line:: SUNT AICI: 8
+
+May 21, 2024, 4:38 pm|Process line:: SUNT AICI: 9
+
+May 21, 2024, 4:38 pm|Process line:: 

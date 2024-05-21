@@ -8,10 +8,15 @@ if( !$data ){
     echo json_encode(["status"=> "fail", "message" => "No data provided!"]);
     exit();
 }
-
+session_start();
+unset($_SESSION["progress"]);
 $process = new Process("process.txt");
+$process->output_file->clear_contents();
 $process->command = "./ocr" ;
 $process->cwd = APP_PATH;
 $process->run_process();
-// var_dump($data);
+// var_dump($_SESSION);
+
+echo json_encode(["status"=> "sucecss", "message" => "Process done!"]);
+
 ?>

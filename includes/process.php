@@ -1,6 +1,7 @@
 <?php
 require_once("config.php");
 require_once("log.php");
+require_once("functions.php");
 
 class Process{
     public $command = "";
@@ -42,12 +43,19 @@ class Process{
     public function run_process(){
         $this->process = proc_open($this->command, $this->descriptors_array, $this->pipes, $this->cwd, null);
         if (is_resource($this->process)){
+            do{
+                $current= fgets($this->pipes[1]);
+                $this->output_file->addEntry("Process line:", $current);
+                update_session("process",$current);
+                $arr = proc_get_status($this->process);
+            }while($arr["running"]);
+
             $this->return_message = fgets($this->pipes[1], 1024);
             fclose($this->pipes[0]);
             $this->output = stream_get_contents($this->pipes[1]);
             $message = "\nCommand: " . $this->command . " \n\nResponse\n";
-            $this->output_file->addEntry($message, $this->output);
-            $this->output_file->add_separator("#");
+            // $this->output_file->addEntry($message, $this->output);
+            // $this->output_file->add_separator("#");
                 
             fclose($this->pipes[1]);
             $this->return_value = proc_close($this->process);
