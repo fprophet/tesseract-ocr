@@ -4,36 +4,29 @@
 #include <tesseract/baseapi.h>
 #include <leptonica/allheaders.h>
 #include <unistd.h>
-#include <stdio.h>
+#include "app.h"
 
 using namespace std;
-int main()
+
+
+
+int main( int argc, char* argv[])
 {
-    // char *outText;
+   application app;
+    app.parse_arguments(argc,argv);
 
-    // tesseract::TessBaseAPI *api = new tesseract::TessBaseAPI();
-    // // Initialize tesseract-ocr with English, without specifying tessdata path
-    // if (api->Init(NULL, "eng")) {
-    //     fprintf(stderr, "Could not initialize tesseract.\n");
-    //     exit(1);
-    // }
-
-    // // Open input image with leptonica library
-    // Pix *image = pixRead("testocr.png");
-    // api->SetImage(image);
-    // // Get OCR result
-    // outText = api->GetUTF8Text();
-    // printf("OCR output:\n%s", outText);
-
-    // // Destroy used object and release memory
-    // api->End();
-    // delete api;
-    // delete [] outText;
-    // pixDestroy(&image);
-
-    for( int i =0; i < 10; i++ ){
-        cout<< "SUNT AICI: " << i << endl;
- sleep(1);
+    if( app.image.empty() ){
+        cout << "ERROR: File path is missing! Exiting!" << endl;
+        return 0;
     }
+
+    string image_path = IMAGE_DIR + "/" + app.image;
+    cv::Mat image = cv::imread(image_path);
+    if( image.empty()){
+        cout << "ERROR: Image could not be read! Exiting!" << endl;
+        return 0;
+    }
+
+    
     return 0;
 }
