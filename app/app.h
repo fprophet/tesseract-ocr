@@ -94,7 +94,21 @@ struct application{
     cv::Mat threshold(cv::Mat &original){
         
         cv::Mat adaptive;
-        cv::adaptiveThreshold(original,adaptive,255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY_INV, 3,25);
+
+		float block_size;
+
+		int truncated = trunc((int)this->avg_width );
+		if ( truncated % 2 != 1){
+			block_size = truncated- 1;
+		}else{
+			block_size = truncated;
+		}
+		cout << "BLOCK SIZE: " << cv::THRESH_OTSU << endl;
+		cout << "BLOCK SIZE: " << cv::THRESH_BINARY_INV << endl;
+
+        // cv::threshold(original,adaptive,0,255,THRESH_BINARY_INV+THRESH_OTSU);
+
+        cv::adaptiveThreshold(original,adaptive,255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY_INV, block_size,25);
         
         if( WRITE_IMAGES){
             this->write_image("adaptive", adaptive);
@@ -115,7 +129,66 @@ struct application{
         return morphed;
     }
 
+    cv::Mat remove_straight_lines( cv::Mat img, float  avg_width, float avg_height){
+		cv::Mat horizontal = img.clone();
+		cv::Mat vertical = img.clone();
+		int horizontal_size = horizontal.cols / (15) ;
+		cv::Mat horizontalStructure = getStructuringElement(cv::MORPH_RECT, cv::Size(horizontal_size, 1));
+		erode(horizontal, horizontal, horizontalStructure, Point(-1, -1));
+		dilate(horizontal, horizontal, horizontalStructure, Point(-1, -1));
+		bitwise_not(horizontal, horizontal);
+		cv::Mat edges2;
+		adaptiveThreshold(horizontal, edges2, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 3, -2);
 
+		cv::Mat kernel2 = cv::Mat::ones(2, 2, CV_8UC1);
+		dilate(edges2, edges2, kernel2);
+		cv::Mat smooth2;
+		horizontal.copyTo(smooth2);
+
+		blur(smooth2, smooth2, Size(2, 2));
+		smooth2.copyTo(horizontal, edges2);
+		if( WRITE_IMAGES){
+            this->write_image("horizontal_lines", edges2);
+        }
+		// imwrite(processed_image_path + "horizontal.png",edges2);
+		// processed_paths.push_back(processed_image_path + "horizontal.png");
+
+		int vertical_size = vertical.rows / (15) ;
+		cv::Mat verticalStructure = getStructuringElement(cv::MORPH_RECT, cv::Size(1, vertical_size));
+
+		erode(vertical, vertical, verticalStructure, Point(-1, -1));
+		dilate(vertical, vertical, verticalStructure, Point(-1, -1));
+
+		bitwise_not(vertical, vertical);
+		cv::Mat edges;
+		adaptiveThreshold(vertical, edges, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 3, -2);
+
+		cv::Mat kernel = cv::Mat::ones(2, 2, CV_8UC1);
+		dilate(edges, edges, kernel);
+		cv::Mat smooth;
+		vertical.copyTo(smooth);
+
+		blur(smooth, smooth, Size(2, 2));
+		smooth.copyTo(vertical, edges);
+			if( WRITE_IMAGES){
+            this->write_image("vertical_lines", edges);
+        }
+		// imwrite(processed_image_path + "vertical.png",edges);
+		// processed_paths.push_back(processed_image_path + "vertical.png");
+
+		vector<vector<Point>> cnts_h, cnts_v;
+		vector<Vec4i> hier_h, hier_v;
+		findContours(edges2, cnts_h, RETR_CCOMP, CHAIN_APPROX_SIMPLE, Point(0,0));
+		findContours(edges, cnts_v, RETR_CCOMP, CHAIN_APPROX_SIMPLE, Point(0,0));
+		drawContours( img, cnts_v, -1, (0,255,0), avg_height);
+
+		drawContours( img, cnts_h, -1, (0,255,0), avg_width);
+		 if( WRITE_IMAGES){
+            this->write_image("removed_lines", img);
+        }
+
+		return img;
+	}
 
     bool render_text_box(){
 		string output = APP_PATH + "/box-file";
@@ -189,6 +262,33 @@ struct application{
 		cout << "Average width:" << avg_w << endl;
 		cout << "Average height:" << avg_h << endl;
 		return true;
+	}
+
+    cv::Mat remove_straight_lines2( cv::Mat img){
+		Mat horizontal_kernel = getStructuringElement(MORPH_RECT, Size(25,1));
+		Mat remove_horizontal;
+ 		morphologyEx(img,remove_horizontal,MORPH_CLOSE, horizontal_kernel,Point(-1,-1), 3);
+		if( WRITE_IMAGES){
+            this->write_image("removed_2", remove_horizontal);
+        }
+		return img;
+	}
+
+	  cv::Mat remove_straight_lines3( cv::Mat img){
+		Mat color_dst;
+		vector<Vec4i> lines;
+		 cvtColor( img, color_dst, COLOR_GRAY2BGR );
+		HoughLinesP( img, lines, 1, CV_PI/180, 80, 50,0 );
+		for( size_t i = 0; i < lines.size(); i++ )
+		{
+		line( color_dst, Point(lines[i][0], lines[i][1]),
+		Point( lines[i][2], lines[i][3]), Scalar(0,0,255), 3, 8 );
+		}
+
+		if( WRITE_IMAGES){
+            this->write_image("removed_3", color_dst);
+        }
+		return img;
 	}
 
 };

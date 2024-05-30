@@ -39,19 +39,30 @@ int main( int argc, char* argv[])
         return 0;
     }
 
+    app.render_text_box();
+
+    app.avg_char_size();
+
+
 
     app.original_height = image.rows;
     app.original_width = image.cols;
 
+    //convert to gray scale in order to threshold 
     cv::Mat gray = app.gray_scale(image);
 
+    //thershold the image for further pre processing
     cv::Mat adaptive = app.threshold(gray);
 
+    //remove noise like small dots using morphology close
     cv::Mat morphed = app.morph(adaptive);
 
-    app.render_text_box();
 
-    app.avg_char_size();
+    // cv::Mat removed_lines = app.remove_straight_lines3(adaptive);
+
+  
+
+    cv::Mat removed_lines = app.remove_straight_lines(morphed, app.avg_width, app.avg_height);
 
     // char *outText;
 
