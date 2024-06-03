@@ -60,9 +60,10 @@ int main( int argc, char* argv[])
 
     // cv::Mat removed_lines = app.remove_straight_lines3(adaptive);
 
-  
-
     cv::Mat removed_lines = app.remove_straight_lines(morphed, app.avg_width, app.avg_height);
+
+    cv::Mat deskewd = app.deskew_image(removed_lines);
+
 
     // char *outText;
 

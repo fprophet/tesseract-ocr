@@ -291,4 +291,37 @@ struct application{
 		return img;
 	}
 
+	Mat deskew_image( Mat img ){
+		vector<Point> locations;
+		
+		int angle;
+
+		RotatedRect rect;
+
+		Mat matrix,rotated;
+
+		Point2f center( img.cols/2, img.rows/2);
+		
+		findNonZero(img, locations);
+		rect = minAreaRect(locations);
+
+		// if (rect.angle < -45){
+		// 	angle = -(90 + rect.angle);
+			
+		// }else{
+		// 	angle = rect.angle;
+
+		// }
+
+		matrix = getRotationMatrix2D(center, -angle ,1);
+
+		warpAffine(img, rotated,matrix,Size(img.cols, img.rows));
+
+		if( WRITE_IMAGES){
+            this->write_image("deskewd", rotated);
+        }
+		cout << "ANGLE: " << rect.angle << endl;
+		return img;
+	}
+
 };
