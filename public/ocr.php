@@ -10,6 +10,9 @@ if( !$data ){
 }
 session_start();
 unset($_SESSION["progress"]);
+
+delete_files_from(ROOT . "/public/processed-images/");
+
 $process = new Process("process.txt");
 $process->output_file->clear_contents();
 $process->command = "./ocr --image " .$data["file"] ;

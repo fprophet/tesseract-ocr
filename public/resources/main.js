@@ -44,7 +44,7 @@ function pageEvents() {
 
 function checkFileInput() {
   const input = $("input[type=file]");
-  if (!input.files || input.files.length > 1) {
+  if (!input.files || input.files.length < 1) {
     return false;
   }
 
@@ -66,6 +66,14 @@ function processRequest(file) {
     method: "POST",
     body: JSON.stringify({ file: file }),
   });
+}
+
+function loading(display = true) {
+  if (display) {
+    $(".loader-wrapper").style.display = "flex";
+  } else {
+    $(".loader-wrapper").style.display = "none";
+  }
 }
 
 function _toggleOptions() {
@@ -113,6 +121,7 @@ function _handleStartProcess() {
   }
   $("#output-text").innerHTML = "";
   $(".images-display").innerHTML = "";
+  loading();
 
   uploadRequest()
     .then((res) => res.json())
@@ -124,6 +133,7 @@ function _handleStartProcess() {
           .then((res) => res.json())
           .then((res) => {
             interval = false;
+            loading(false);
           });
         // console.log(res);
       }

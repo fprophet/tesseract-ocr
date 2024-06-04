@@ -1,18 +1,29 @@
-June 4, 2024, 12:09 pm|Process line:: Arguments parsed!
+June 4, 2024, 1:44 pm|Process line:: Arguments parsed!
 
-June 4, 2024, 12:09 pm|ERROR: Arguments parsed!
+June 4, 2024, 1:44 pm|ERROR: 
+June 4, 2024, 1:44 pm|Process line:: Average width:9.66202
 
-June 4, 2024, 12:09 pm|Process line:: --image: images-gray.jpeg
+June 4, 2024, 1:44 pm|Process line:: Average height:14.0662
 
-June 4, 2024, 12:09 pm|ERROR: --image: images-gray.jpeg
+June 4, 2024, 1:44 pm|Process line:: --image: ouy3d-gray.jpg
 
-June 4, 2024, 12:09 pm|Process line:: BLOCK SIZE: 8
+June 4, 2024, 1:44 pm|Process line:: BLOCK SIZE: 8
 
-June 4, 2024, 12:09 pm|ERROR: BLOCK SIZE: 8
+June 4, 2024, 1:44 pm|Process line:: BLOCK SIZE: 1
 
-June 4, 2024, 12:09 pm|Process line:: BLOCK SIZE: 1
+June 4, 2024, 1:44 pm|Process line:: --image: ouy3d-adaptive.jpg
 
-June 4, 2024, 12:09 pm|ERROR: BLOCK SIZE: 1
+June 4, 2024, 1:44 pm|Process line:: --image: ouy3d-morphed.jpg
 
-June 4, 2024, 12:09 pm|ERROR: 
-June 4, 2024, 12:09 pm|ERROR: 
+June 4, 2024, 1:44 pm|Process line:: --image: ouy3d-horizontal_lines.jpg
+
+June 4, 2024, 1:44 pm|Process line:: --image: ouy3d-vertical_lines.jpg
+
+June 4, 2024, 1:44 pm|Process line:: --image: ouy3d-removed_lines.jpg
+
+June 4, 2024, 1:44 pm|Process line:: --image: ouy3d-deskewd.jpg
+
+June 4, 2024, 1:44 pm|Process line:: ANGLE: 15.4317
+
+June 4, 2024, 1:44 pm|Process line:: Script has finished!
+

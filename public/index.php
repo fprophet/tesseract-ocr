@@ -19,15 +19,17 @@
     <section id="main">
         <div id="upload-section">
             <div id="input-section">
+           
                 <div class="file-input-wrapper">
-                    <div class="dropzone" data-text="Select your file!">
-                        <img src="http://100dayscss.com/codepen/upload.svg" class="upload-icon" />
-                        <input type="file" id="upload" class=upload-input>
+                    <div class="file-upload-wrapper" data-text="Select your file!">
+                        <input name="file-upload-field" type="file" class="file-upload-field" value="">
                     </div>
-                    <div class="buttons-holder">
-                        <label class="btn" for="upload" name="file-button" id="file-button" >Upload file</label>
+
+                    <div class="upload-buttons">
+                        <button class="start-process">Start Process</button>             
                         <i class="options-toggle fa-solid fa-gear"></i>
                     </div>
+
                     <div class="options-wrapper">
                         <div class="input-group">
                             <label for="process-image">Pre Process Image</label>
@@ -42,8 +44,11 @@
                             <input type="checkbox" name="process-image" id="process-image">
                         </div>
                     </div>
-
-                    <button class="start-process">Start Process</button>               
+                    
+                    <div class="loader-wrapper">
+                        <span class="loader"></span>
+                        <span>Processing...</span>
+                    </div>
                 </div>
             </div>
 
@@ -69,14 +74,25 @@
             </div>
           
         </div>
-        <hr/>
+
         <div id="output-wrapper">
-            <div id="output-text">
+
+            <div id="output-text-wrapper">
+                <span>Script output:</span>
+                <div id="output-text">  
+                    
+                </div>
+
             </div>
-            <div class="images-display-wrapper">
-                <div class="images-display">
+            <div class="display-wrapper">
+                <span>Processed Images:</span>
+                
+                <div class="images-display-wrapper">
+                    <div class="images-display">
+                    </div>
                 </div>
             </div>
+           
         </div>
    
     </section>

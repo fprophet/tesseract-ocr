@@ -33,7 +33,10 @@ class Process{
         global $command_log;
         $this->descriptors_array = [ 0 => ["pipe", "r"], 
                                      1 => ["pipe", "w"], 
-                                     2 => ["pipe","w"]];
+                                     2 => ["pipe","w"]
+                                    //  3 => ["file", ROOT . "/logs/" . $this->output_file->file_name , "a"]];
+                                    
+                                    ];
     }
 
     private function _initialize_cwd(){
@@ -43,6 +46,11 @@ class Process{
     public function run_process(){
         $this->process = proc_open($this->command, $this->descriptors_array, $this->pipes, $this->cwd, null);
         if (is_resource($this->process)){
+
+            //unblock pipes in order to simlutaniosly read from both
+            stream_set_blocking($this->pipes[1], 0);
+            stream_set_blocking($this->pipes[2], 0);
+
             do{
                 $current= fgets($this->pipes[1]);
                 if( $current ){

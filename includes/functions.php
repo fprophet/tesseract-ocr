@@ -17,4 +17,13 @@ function update_session($context,$data){
  session_write_close();
 }
 
+function delete_files_from($path){
+   $files = glob($path . "/*");
+   foreach($files as $file){ 
+      if(is_file($file)) {
+         unlink($file); 
+      }
+   }
+}
+
 ?>
