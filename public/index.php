@@ -15,7 +15,7 @@
         </div>
         <div id="nav-list"></div>
     </header>
-
+ 
     <section id="main">
         <div id="upload-section">
             <div id="input-section">
@@ -72,17 +72,13 @@
         <hr/>
         <div id="output-wrapper">
             <div id="output-text">
-
+            </div>
+            <div class="images-display-wrapper">
+                <div class="images-display">
+                </div>
             </div>
         </div>
-        <hr>
-        <div id="processed-images-preview">
-            <!-- <div class="processed-image-preview"></div> -->
-            <!-- <div class="processed-image-preview"></div> -->
-
-            <!-- <div class="processed-image-preview"></div> -->
-
-        </div>
+   
     </section>
     
     <footer></footer>

@@ -24,10 +24,14 @@ int main( int argc, char* argv[])
     }
 
     
-    if( app.debugging ){
+    if( app.testing ){
         IMAGE_PATH = APP_PATH + "/" + app.image;
     }else{
         IMAGE_PATH = IMAGE_DIR + "/" + app.image;
+    }
+
+    if( app.debugging ){
+        // WRITE_IMAGES = true;
     }
 
 
@@ -35,7 +39,9 @@ int main( int argc, char* argv[])
     cv::Mat image = cv::imread(IMAGE_PATH);
 
     if( image.empty()){
-        cout << "ERROR: Image could not be read! Exiting!" << endl;
+        cout << "ERROR: Image could not be read!" << endl;
+        cout << "Path to image: " << IMAGE_PATH << endl;
+        cout << "Exiting!" << endl;
         return 0;
     }
 

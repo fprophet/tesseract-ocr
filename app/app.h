@@ -9,13 +9,16 @@ const string APP_PATH = ROOT + "/app";
 const string TESS_DATA = "/usr/local/share/tessdata/";
 string IMAGE_PATH;
 
-const bool WRITE_IMAGES = true;
+bool WRITE_IMAGES = true;
+
 using namespace cv;
 struct application{
     
     string image;
 
-    bool debugging;
+    bool debugging = false;
+
+	bool testing  = false;
 
     int original_width;
 
@@ -32,6 +35,11 @@ struct application{
 
             if ( this->argument_exists("--debugging", i, argc, argv) ){
                 this->debugging = true;
+                this->image = "test.jpg";
+            }
+
+			 if ( this->argument_exists("--testing", i, argc, argv) ){
+                this->testing = true;
                 this->image = "test.jpg";
             }
         }            
@@ -76,6 +84,8 @@ struct application{
 
         cv::imwrite(PROCESSED_DIR +  "/" + save_name, img);
 
+		cout << "--image: " <<  save_name << endl;
+
         return;
     }
 
@@ -83,7 +93,6 @@ struct application{
 
         cv::Mat gray;
         cv::cvtColor(original, gray, cv::COLOR_BGR2GRAY);
-
         if( WRITE_IMAGES){
             this->write_image("gray", gray);
         }
@@ -112,6 +121,7 @@ struct application{
         
         if( WRITE_IMAGES){
             this->write_image("adaptive", adaptive);
+
         }
 
         return adaptive;
@@ -124,6 +134,7 @@ struct application{
 
          if( WRITE_IMAGES){
             this->write_image("morphed", morphed);
+
         }
 
         return morphed;
@@ -172,6 +183,7 @@ struct application{
 		smooth.copyTo(vertical, edges);
 			if( WRITE_IMAGES){
             this->write_image("vertical_lines", edges);
+
         }
 		// imwrite(processed_image_path + "vertical.png",edges);
 		// processed_paths.push_back(processed_image_path + "vertical.png");
@@ -185,6 +197,7 @@ struct application{
 		drawContours( img, cnts_h, -1, (0,255,0), avg_width);
 		 if( WRITE_IMAGES){
             this->write_image("removed_lines", img);
+
         }
 
 		return img;
@@ -319,6 +332,7 @@ struct application{
 
 		if( WRITE_IMAGES){
             this->write_image("deskewd", rotated);
+
         }
 		cout << "ANGLE: " << rect.angle << endl;
 		return img;

@@ -12,7 +12,7 @@ session_start();
 unset($_SESSION["progress"]);
 $process = new Process("process.txt");
 $process->output_file->clear_contents();
-$process->command = "./ocr" ;
+$process->command = "./ocr --image " .$data["file"] ;
 $process->cwd = APP_PATH;
 $process->run_process();
 // var_dump($_SESSION);

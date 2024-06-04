@@ -4,9 +4,15 @@ function update_session($context,$data){
        session_start();
     }
  if( isset($_SESSION["progress"]) ){
-    $_SESSION["progress"][$context] .= $_SESSION["progress"][$context] . "\n" . $data;
+   if( !is_array($_SESSION["progress"][$context]) ){
+      $_SESSION["progress"][$context] = [];
+   }
+   if( !in_array($data, $_SESSION["progress"][$context]) ){
+     
+      $_SESSION["progress"][$context][] = $data;
+   }
  }else{
-    $_SESSION["progress"][$context] = $data;
+    $_SESSION["progress"][$context][] = $data;
  }
  session_write_close();
 }

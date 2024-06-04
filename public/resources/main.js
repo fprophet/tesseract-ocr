@@ -8,6 +8,22 @@ function $(selector, all = false) {
   }
 }
 
+function $create(tag, id = false, cls = false, text = false) {
+  const element = document.createElement(tag);
+  if (id) {
+    element.setAttribute("id", id);
+  }
+  if (cls) {
+    cls.forEach(function (elem) {
+      element.classList.add(elem);
+    });
+  }
+  if (text) {
+    element.innerHTML = text;
+  }
+  return element;
+}
+
 function pageEvents() {
   const options = $(".options-toggle");
   options ? options.addEventListener("click", _toggleOptions) : null;
@@ -105,6 +121,28 @@ function udpateDatax() {
   }, interval);
 }
 
+function displayImage(image) {
+  fetch("/processed-images/" + image)
+    .then((res) => res.blob())
+    .then((blob) => {
+      const imageUrl = URL.createObjectURL(blob);
+
+      const wrapper = $(".images-display");
+
+      const holder = $create("div", false, ["img-holder"]);
+
+      const name_span = $create("span", false, ["img-name"], image);
+
+      const img = $create("img");
+
+      img.src = imageUrl;
+
+      holder.appendChild(img);
+      holder.appendChild(name_span);
+      wrapper.appendChild(holder);
+    });
+}
+
 function updateData() {
   fetch("/progress.php?progress=process", {
     mehtod: "GET",
@@ -112,7 +150,18 @@ function updateData() {
     .then((res) => res.json())
     .then((res) => {
       if (res["status"] !== "empty") {
-        $("#output-text").innerHTML += res["data"] + "<br/>";
+        for (i = 0; i < res["data"].length; i++) {
+          $("#output-text").innerHTML += res["data"][i] + " <br>";
+          if (res["data"][i].indexOf("--image:") > -1) {
+            console.log(res["data"][i].split(":"));
+            let image = res["data"][i].split(":")[1].trim();
+            displayImage(image);
+          }
+        }
+        console.log(res["data"]);
+        // debugger;
+        // $("#output-text").innerHTML = res["data"].replaceAll("\n", "<br>");
+        // $("#output-text").innerHTML += res["data"].replaceAll("\n", "<br>");
       }
 
       if (interval) {
