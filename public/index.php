@@ -80,7 +80,12 @@
         </div>
    
     </section>
-    
+    <div id="modal">
+        <button class="close-modal">Close</button>
+        <div class="modal-image-wrapper">
+            <img id="modal-img" src="">
+        </div>
+    </div>
     <footer></footer>
     <script src="/resources/main.js?v=" <?= time()?>></script>
 </body>

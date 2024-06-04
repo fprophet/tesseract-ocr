@@ -33,7 +33,7 @@ class Process{
         global $command_log;
         $this->descriptors_array = [ 0 => ["pipe", "r"], 
                                      1 => ["pipe", "w"], 
-                                     2 => ["file", ROOT . "/logs/" . $this->output_file->file_name , "a"]];
+                                     2 => ["pipe","w"]];
     }
 
     private function _initialize_cwd(){
@@ -45,8 +45,17 @@ class Process{
         if (is_resource($this->process)){
             do{
                 $current= fgets($this->pipes[1]);
-                $this->output_file->addEntry("Process line:", $current);
-                update_session("process",$current);
+                if( $current ){
+                    $this->output_file->addEntry("Process line:", $current);
+                    update_session("process",$current);
+
+                }
+
+                $err = fgets($this->pipes[2]);
+                if( $err ){
+                    $this->output_file->addEntry("ERROR", $current);
+                    update_session("process",$err);
+                }
                 $arr = proc_get_status($this->process);
             }while($arr["running"]);
 

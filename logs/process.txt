@@ -1,21 +1,18 @@
-May 21, 2024, 5:29 pm|Process line:: SUNT AICI: 0
+June 4, 2024, 12:09 pm|Process line:: Arguments parsed!
 
-May 21, 2024, 5:29 pm|Process line:: SUNT AICI: 1
+June 4, 2024, 12:09 pm|ERROR: Arguments parsed!
 
-May 21, 2024, 5:29 pm|Process line:: SUNT AICI: 2
+June 4, 2024, 12:09 pm|Process line:: --image: images-gray.jpeg
 
-May 21, 2024, 5:29 pm|Process line:: SUNT AICI: 3
+June 4, 2024, 12:09 pm|ERROR: --image: images-gray.jpeg
 
-May 21, 2024, 5:29 pm|Process line:: SUNT AICI: 4
+June 4, 2024, 12:09 pm|Process line:: BLOCK SIZE: 8
 
-May 21, 2024, 5:29 pm|Process line:: SUNT AICI: 5
+June 4, 2024, 12:09 pm|ERROR: BLOCK SIZE: 8
 
-May 21, 2024, 5:29 pm|Process line:: SUNT AICI: 6
+June 4, 2024, 12:09 pm|Process line:: BLOCK SIZE: 1
 
-May 21, 2024, 5:30 pm|Process line:: SUNT AICI: 7
+June 4, 2024, 12:09 pm|ERROR: BLOCK SIZE: 1
 
-May 21, 2024, 5:30 pm|Process line:: SUNT AICI: 8
-
-May 21, 2024, 5:30 pm|Process line:: SUNT AICI: 9
-
-May 21, 2024, 5:30 pm|Process line:: 
+June 4, 2024, 12:09 pm|ERROR: 
+June 4, 2024, 12:09 pm|ERROR: 

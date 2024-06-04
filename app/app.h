@@ -318,15 +318,15 @@ struct application{
 		findNonZero(img, locations);
 		rect = minAreaRect(locations);
 
-		// if (rect.angle < -45){
-		// 	angle = -(90 + rect.angle);
+		if (rect.angle < -45){
+			angle = -(90 + rect.angle);
 			
-		// }else{
-		// 	angle = rect.angle;
+		}else{
+			angle = rect.angle;
 
-		// }
+		}
 
-		matrix = getRotationMatrix2D(center, -angle ,1);
+		matrix = getRotationMatrix2D(center, angle ,1);
 
 		warpAffine(img, rotated,matrix,Size(img.cols, img.rows));
 

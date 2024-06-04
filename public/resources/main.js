@@ -35,6 +35,11 @@ function pageEvents() {
   start_process
     ? start_process.addEventListener("click", _handleStartProcess)
     : null;
+
+  const close_modal = $(".close-modal");
+  if (close_modal) {
+    close_modal.addEventListener("click", _handleCloseModal);
+  }
 }
 
 function checkFileInput() {
@@ -72,6 +77,17 @@ function _toggleOptions() {
   }
 }
 
+function _handleCloseModal(event) {
+  $("#modal").style.display = "none";
+}
+
+function _handleModalImage(event) {
+  const img = event.target.closest("img");
+
+  $("#modal-img").src = img.src;
+  $("#modal").style.display = "block";
+}
+
 function _handleFileUpload(event) {
   const files = event.target.files;
   if (!files || files.length > 1) {
@@ -95,6 +111,8 @@ function _handleStartProcess() {
     window.alert("Please select a file first!");
     return false;
   }
+  $("#output-text").innerHTML = "";
+  $(".images-display").innerHTML = "";
 
   uploadRequest()
     .then((res) => res.json())
@@ -139,6 +157,8 @@ function displayImage(image) {
 
       holder.appendChild(img);
       holder.appendChild(name_span);
+
+      holder.addEventListener("click", _handleModalImage);
       wrapper.appendChild(holder);
     });
 }
@@ -151,9 +171,11 @@ function updateData() {
     .then((res) => {
       if (res["status"] !== "empty") {
         for (i = 0; i < res["data"].length; i++) {
+          if (!res["data"][i]) {
+            continue;
+          }
           $("#output-text").innerHTML += res["data"][i] + " <br>";
           if (res["data"][i].indexOf("--image:") > -1) {
-            console.log(res["data"][i].split(":"));
             let image = res["data"][i].split(":")[1].trim();
             displayImage(image);
           }
