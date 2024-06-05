@@ -190,10 +190,6 @@ function updateData() {
             displayImage(image);
           }
         }
-        console.log(res["data"]);
-        // debugger;
-        // $("#output-text").innerHTML = res["data"].replaceAll("\n", "<br>");
-        // $("#output-text").innerHTML += res["data"].replaceAll("\n", "<br>");
       }
 
       if (interval) {

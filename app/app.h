@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <iostream>
 using namespace std;
+using namespace tesseract;
+
 
 const string ROOT = "/var/www/html/tesseract-ocr";
 const string IMAGE_DIR = ROOT + "/uploads"; 
@@ -28,6 +30,10 @@ struct application{
 
     void parse_arguments(int argc, char ** argv){
         
+		if( this->debugging ){
+			cout << "Parsing arguments..." << endl;
+		}
+
         for( int i = 1; i < argc; i ++ ){
             if ( this->argument_exists("--image", i, argc, argv) ){
                 this->image = argv[i + 1];
@@ -35,7 +41,6 @@ struct application{
 
             if ( this->argument_exists("--debugging", i, argc, argv) ){
                 this->debugging = true;
-                this->image = "test.jpg";
             }
 
 			 if ( this->argument_exists("--testing", i, argc, argv) ){
@@ -89,7 +94,60 @@ struct application{
         return;
     }
 
+	void scale_image( Mat &img){
+
+		if( this->debugging ){
+			cout << "Resizing image..." << endl;
+		}
+
+		const double pix_to_inch = 0.0104166667;
+		double inch_w, inch_h, resize_w, resize_h;
+
+		//resize image
+		inch_w = img.cols * pix_to_inch;
+		inch_h = img.rows * pix_to_inch;
+
+		resize_w = inch_w * 300;
+		resize_h = inch_h * 300;
+
+		if( this->debugging ){
+			cout << "New dimensions:" << endl;
+			cout << "Width:" << resize_w << endl;
+			cout << "Height:" << resize_h << endl;
+		}
+
+		resize(img,img,Size(resize_w ,resize_h));
+
+		if( WRITE_IMAGES){
+            this->write_image("resized", img);
+        }
+
+        vector<string>  name_exploded = this->explode_name(this->image);
+
+		if( this->testing ){
+			IMAGE_PATH = PROCESSED_DIR + "/" + name_exploded[0] + "-resized." + name_exploded[1] ;
+		}else{
+			IMAGE_PATH = PROCESSED_DIR + "/" + name_exploded[0]  + "-resized." + name_exploded[1] ;
+		}
+
+		//adjust avg values
+		this->avg_height = this->avg_height * pix_to_inch * 300;
+		this->avg_width = this->avg_width * pix_to_inch * 300;
+
+		if( this->debugging ){
+			cout << "New avarages:" << endl;
+			cout << "Width:" << this->avg_height  << endl;
+			cout << "Height:" << this->avg_width  << endl;
+		}
+
+
+	}
+
     cv::Mat gray_scale( cv::Mat &original){
+
+		if( this->debugging ){
+			cout << "Grayscaling image..." << endl;
+		}
 
         cv::Mat gray;
         cv::cvtColor(original, gray, cv::COLOR_BGR2GRAY);
@@ -102,22 +160,35 @@ struct application{
 
     cv::Mat threshold(cv::Mat &original){
         
+		if( this->debugging ){
+			cout << "Thresholding image..." << endl;
+		}
+
         cv::Mat adaptive;
 
 		float block_size;
 
-		int truncated = trunc((int)this->avg_width );
-		if ( truncated % 2 != 1){
-			block_size = truncated- 1;
+		int truncated;
+
+		if( !this->avg_width ){
+			block_size = 23;
+
 		}else{
-			block_size = truncated;
+			truncated = trunc((int)this->avg_width );
+			if ( truncated % 2 != 1){
+				block_size = truncated- 1;
+			}else{
+				block_size = truncated;
+			}
 		}
-		cout << "BLOCK SIZE: " << cv::THRESH_OTSU << endl;
-		cout << "BLOCK SIZE: " << cv::THRESH_BINARY_INV << endl;
+
+		// cout << "BLOCK SIZE: " << this->avg_width << endl;
+		
+		// cout << "BLOCK SIZE: " << cv::THRESH_BINARY_INV << endl;
 
         // cv::threshold(original,adaptive,0,255,THRESH_BINARY_INV+THRESH_OTSU);
 
-        cv::adaptiveThreshold(original,adaptive,255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY_INV, block_size,25);
+        cv::adaptiveThreshold(original,adaptive,255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY_INV, block_size,20);
         
         if( WRITE_IMAGES){
             this->write_image("adaptive", adaptive);
@@ -128,9 +199,16 @@ struct application{
     }
 
     cv::Mat morph(cv::Mat &original ){
-        cv::Mat kernel = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(3,3));
+
+		if( this->debugging ){
+			cout << "Morphing image..." << endl;
+		}
+
+
+        cv::Mat kernel = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(1,1));
         cv::Mat morphed;
-        cv::morphologyEx(original, morphed, cv::MORPH_CLOSE,kernel);
+        cv::morphologyEx(original, morphed,MORPH_RECT, kernel);
+        // cv::erode(original, morphed, kernel);
 
          if( WRITE_IMAGES){
             this->write_image("morphed", morphed);
@@ -141,6 +219,11 @@ struct application{
     }
 
     cv::Mat remove_straight_lines( cv::Mat img, float  avg_width, float avg_height){
+
+		if( this->debugging ){
+			cout << "Removing straight lines from image..." << endl;
+		}
+
 		cv::Mat horizontal = img.clone();
 		cv::Mat vertical = img.clone();
 		int horizontal_size = horizontal.cols / (15) ;
@@ -161,8 +244,7 @@ struct application{
 		if( WRITE_IMAGES){
             this->write_image("horizontal_lines", edges2);
         }
-		// imwrite(processed_image_path + "horizontal.png",edges2);
-		// processed_paths.push_back(processed_image_path + "horizontal.png");
+
 
 		int vertical_size = vertical.rows / (15) ;
 		cv::Mat verticalStructure = getStructuringElement(cv::MORPH_RECT, cv::Size(1, vertical_size));
@@ -204,6 +286,11 @@ struct application{
 	}
 
     bool render_text_box(){
+
+		if( this->debugging ){
+			cout << "Rendering text box..." << endl;
+		}
+
 		string output = APP_PATH + "/box-file";
 		int time_out = 0;
 		string language = "eng";
@@ -250,6 +337,11 @@ struct application{
 	}
 
 	bool avg_char_size(){
+
+		if( this->debugging ){
+			cout << "Calcuating avg width and height for found characters..." << endl;
+		}
+
 		string box_path = APP_PATH + "/box-file.box";
 		vector<Vec4i> coords = this->read_box_file(box_path.c_str());
 		if( coords.size() == 0){
@@ -272,8 +364,13 @@ struct application{
 
 		this->avg_height = avg_h;
 		this->avg_width = avg_w;
-		cout << "Average width:" << avg_w << endl;
-		cout << "Average height:" << avg_h << endl;
+
+		if( this->debugging ){
+			cout << "Average width:" << avg_w << endl;
+			cout << "Average height:" << avg_h << endl;
+		}
+
+		
 		return true;
 	}
 
@@ -305,6 +402,11 @@ struct application{
 	}
 
 	Mat deskew_image( Mat img ){
+
+		if( this->debugging ){
+			cout << "Deskewing image..." << endl;
+		}
+
 		vector<Point> locations;
 		
 		int angle;
@@ -318,24 +420,123 @@ struct application{
 		findNonZero(img, locations);
 		rect = minAreaRect(locations);
 
-		if (rect.angle < -45){
-			angle = -(90 + rect.angle);
-			
-		}else{
-			angle = rect.angle;
-
+		if( rect.angle == 90 ){
+			return img;
 		}
 
-		matrix = getRotationMatrix2D(center, angle ,1);
+		// if (rect.angle < 90){
+
+		// 	angle = 90 - rect.angle;
+			
+		// }else{
+		// 	angle = rect.angle;
+
+		// }
+
+		matrix = getRotationMatrix2D(center,rect.angle  ,1);
 
 		warpAffine(img, rotated,matrix,Size(img.cols, img.rows));
 
 		if( WRITE_IMAGES){
             this->write_image("deskewd", rotated);
-
         }
-		cout << "ANGLE: " << rect.angle << endl;
+
+		if( this->debugging ){
+			cout << "Skew angel:" << rect.angle << endl;
+		}
+
 		return img;
 	}
+
+	vector<vector<Point>> analyse_layout_get_contours(){
+		vector<vector<Point>> result;
+		vector<Vec4i> hierarchy;
+
+        vector<string>  name_exploded = this->explode_name(this->image);
+		string name = PROCESSED_DIR + "/" + name_exploded[0] + "-removed_lines." + name_exploded[1];
+		
+		Mat analyse_res = imread(name.c_str()), 
+		regions_filled = Mat::zeros(analyse_res.size(),analyse_res.type());
+
+		Pix *image = pixRead(name.c_str());
+		int  left, right, top, bottom;
+		bool found = false;
+		Pixa * pixaImg = pixaCreate(0);
+		pixaAddPix(pixaImg, image, L_CLONE);
+		
+		tesseract::TessBaseAPI *analyse;
+		analyse = new tesseract::TessBaseAPI;
+		analyse->SetVariable("user_defined_dpi", "200");
+
+		PageIteratorLevel line_level = RIL_BLOCK;
+		
+		analyse->InitForAnalysePage();
+		analyse->SetImage(image);
+		analyse->SetPageSegMode(tesseract::PSM_AUTO);
+
+		PageIterator* pi = analyse->AnalyseLayout(true);
+
+		do{
+			Pix * found_block = pi->GetBinaryImage(line_level);
+
+			PolyBlockType blk =  pi->BlockType();
+
+			found = pi->BoundingBox(line_level,&left,&top,&right,&bottom);
+
+			if( found && (blk == PT_HORZ_LINE  || blk == PT_VERT_LINE )){
+				Rect rect = Rect(left,top,right,bottom);
+				rectangle(analyse_res, rect, Scalar(0,255,0),1);
+			}
+                     
+
+		}while(pi->Next(line_level));
+
+
+		if( WRITE_IMAGES){
+            this->write_image("analyse_result", analyse_res);
+        }
+
+		Boxa * boxes = analyse->GetRegions(&pixaImg);
+		for( int i = 0; i < boxes->n; i++){
+			BOX *box = boxaGetBox(boxes,i, L_CLONE);
+			cv::Rect roi(box->x, box->y, box->w, box->h);
+			cv::rectangle(regions_filled, roi, cv::Scalar(255, 255, 255), -1);
+			
+		}
+	
+		// cvtColor(regions_filled,regions_filled,COLOR_BGR2GRAY);
+
+		if( WRITE_IMAGES){
+            this->write_image("analyse_regions_filled", regions_filled);
+        }
+		cvtColor(regions_filled,regions_filled,COLOR_BGR2GRAY);
+
+		findContours(regions_filled, result, hierarchy, RETR_CCOMP , CHAIN_APPROX_SIMPLE, Point(0, 0));
+
+		analyse_res.release();
+		regions_filled.release();
+		analyse->End();
+		return result;
+
+	}
+
+	Json::Value create_blocks_json( vector<vector<Point>>){
+		for(int idx = 0; idx < contours.size(); idx++){
+			Rect rect = boundingRect(contours[idx]);
+			//  cout << rect.x << endl << rect.y << endl << rect.width << endl << rect.height << endl;
+			
+			cv::Rect roi(rect.x,rect.y,rect.width,rect.height);
+			cv::Mat roi_img = img(roi);			
+			detected_block[idx]["x"] 		= rect.x;
+			detected_block[idx]["y"] 		= rect.y;
+			detected_block[idx]["width"] 	= rect.width;
+			detected_block[idx]["height"] = rect.height;
+			detected_block[idx]["id"] = idx;
+
+			// drawContours(img, contours, idx, 1, (0,255,0),1, hierarchy);
+		}
+	}
+
+
 
 };

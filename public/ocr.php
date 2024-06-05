@@ -15,7 +15,7 @@ delete_files_from(ROOT . "/public/processed-images/");
 
 $process = new Process("process.txt");
 $process->output_file->clear_contents();
-$process->command = "./ocr --image " .$data["file"] ;
+$process->command = "./ocr --image " . escapeshellarg($data["file"]) . " --debugging true";
 $process->cwd = APP_PATH;
 $process->run_process();
 // var_dump($_SESSION);

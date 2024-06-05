@@ -6,6 +6,9 @@
 #include <unistd.h>
 #include<fstream>
 #include <tesseract/renderer.h>
+// sudo apt-get install libjsoncpp-dev
+
+#include "/usr/include/jsoncpp/json/json.h"
 
 #include "app.h"
 
@@ -42,17 +45,21 @@ int main( int argc, char* argv[])
         cout << "ERROR: Image could not be read!" << endl;
         cout << "Path to image: " << IMAGE_PATH << endl;
         cout << "Exiting!" << endl;
+        
         return 0;
     }
 
+    
     app.render_text_box();
 
     app.avg_char_size();
 
+    app.scale_image(image);
 
 
     app.original_height = image.rows;
     app.original_width = image.cols;
+
 
     //convert to gray scale in order to threshold 
     cv::Mat gray = app.gray_scale(image);
@@ -69,6 +76,11 @@ int main( int argc, char* argv[])
     cv::Mat removed_lines = app.remove_straight_lines(morphed, app.avg_width, app.avg_height);
 
     cv::Mat deskewd = app.deskew_image(removed_lines);
+
+    vector<vector<Point>> contours = app.analyse_layout_get_contours();
+
+
+
 
 
     // char *outText;

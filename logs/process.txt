@@ -1,29 +1,58 @@
-June 4, 2024, 1:44 pm|Process line:: Arguments parsed!
+June 5, 2024, 10:29 am|Process line:: Arguments parsed!
 
-June 4, 2024, 1:44 pm|ERROR: 
-June 4, 2024, 1:44 pm|Process line:: Average width:9.66202
+June 5, 2024, 10:29 am|Process line:: Rendering text box...
 
-June 4, 2024, 1:44 pm|Process line:: Average height:14.0662
+June 5, 2024, 10:29 am|Process line:: Calcuating avg width and height for found characters...
 
-June 4, 2024, 1:44 pm|Process line:: --image: ouy3d-gray.jpg
+June 5, 2024, 10:29 am|Process line:: Average width:7.8063
 
-June 4, 2024, 1:44 pm|Process line:: BLOCK SIZE: 8
+June 5, 2024, 10:29 am|Process line:: Average height:9.67507
 
-June 4, 2024, 1:44 pm|Process line:: BLOCK SIZE: 1
+June 5, 2024, 10:29 am|Process line:: Resizing image...
 
-June 4, 2024, 1:44 pm|Process line:: --image: ouy3d-adaptive.jpg
+June 5, 2024, 10:29 am|Process line:: New dimensions:
 
-June 4, 2024, 1:44 pm|Process line:: --image: ouy3d-morphed.jpg
+June 5, 2024, 10:29 am|Process line:: Width:1993.75
 
-June 4, 2024, 1:44 pm|Process line:: --image: ouy3d-horizontal_lines.jpg
+June 5, 2024, 10:29 am|Process line:: Height:2650
 
-June 4, 2024, 1:44 pm|Process line:: --image: ouy3d-vertical_lines.jpg
+June 5, 2024, 10:29 am|Process line:: --image: multicol2 (1)-resized.png
 
-June 4, 2024, 1:44 pm|Process line:: --image: ouy3d-removed_lines.jpg
+June 5, 2024, 10:29 am|Process line:: New avarages:
 
-June 4, 2024, 1:44 pm|Process line:: --image: ouy3d-deskewd.jpg
+June 5, 2024, 10:29 am|Process line:: Width:30.2346
 
-June 4, 2024, 1:44 pm|Process line:: ANGLE: 15.4317
+June 5, 2024, 10:29 am|Process line:: Height:24.3947
 
-June 4, 2024, 1:44 pm|Process line:: Script has finished!
+June 5, 2024, 10:29 am|Process line:: Grayscaling image...
+
+June 5, 2024, 10:29 am|Process line:: --image: multicol2 (1)-gray.png
+
+June 5, 2024, 10:29 am|Process line:: Thresholding image...
+
+June 5, 2024, 10:29 am|Process line:: --image: multicol2 (1)-adaptive.png
+
+June 5, 2024, 10:29 am|Process line:: Morphing image...
+
+June 5, 2024, 10:29 am|Process line:: --image: multicol2 (1)-morphed.png
+
+June 5, 2024, 10:29 am|Process line:: Removing straight lines from image...
+
+June 5, 2024, 10:29 am|Process line:: --image: multicol2 (1)-horizontal_lines.png
+
+June 5, 2024, 10:29 am|Process line:: --image: multicol2 (1)-vertical_lines.png
+
+June 5, 2024, 10:29 am|Process line:: --image: multicol2 (1)-removed_lines.png
+
+June 5, 2024, 10:29 am|Process line:: Deskewing image...
+
+June 5, 2024, 10:29 am|Process line:: --image: multicol2 (1)-deskewd.png
+
+June 5, 2024, 10:29 am|Process line:: Skew angel:0
+
+June 5, 2024, 10:29 am|Process line:: --image: multicol2 (1)-analyse_result.png
+
+June 5, 2024, 10:29 am|Process line:: --image: multicol2 (1)-analyse_regions_filled.png
+
+June 5, 2024, 10:29 am|Process line:: Script has finished!
 
