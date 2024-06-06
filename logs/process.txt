@@ -1,58 +1,64 @@
-June 5, 2024, 10:29 am|Process line:: Arguments parsed!
+June 6, 2024, 2:06 pm|Process line:: Arguments parsed!
 
-June 5, 2024, 10:29 am|Process line:: Rendering text box...
+June 6, 2024, 2:06 pm|Process line:: Arguments:
 
-June 5, 2024, 10:29 am|Process line:: Calcuating avg width and height for found characters...
+June 6, 2024, 2:06 pm|Process line:: DPI: 72x72
 
-June 5, 2024, 10:29 am|Process line:: Average width:7.8063
+June 6, 2024, 2:06 pm|Process line:: Size: 3.19 MB
 
-June 5, 2024, 10:29 am|Process line:: Average height:9.67507
+June 6, 2024, 2:06 pm|Process line:: Rendering text box...
 
-June 5, 2024, 10:29 am|Process line:: Resizing image...
+June 6, 2024, 2:06 pm|ERROR: 
+June 6, 2024, 2:06 pm|ERROR: 
+June 6, 2024, 2:06 pm|Process line:: Calcuating avg width and height for found characters...
 
-June 5, 2024, 10:29 am|Process line:: New dimensions:
+June 6, 2024, 2:06 pm|Process line:: Average width:24.1441
 
-June 5, 2024, 10:29 am|Process line:: Width:1993.75
+June 6, 2024, 2:06 pm|Process line:: Average height:31.526
 
-June 5, 2024, 10:29 am|Process line:: Height:2650
+June 6, 2024, 2:06 pm|Process line:: Grayscaling image...
 
-June 5, 2024, 10:29 am|Process line:: --image: multicol2 (1)-resized.png
+June 6, 2024, 2:06 pm|Process line:: --image: image6.png-gray.image6.png
 
-June 5, 2024, 10:29 am|Process line:: New avarages:
+June 6, 2024, 2:06 pm|Process line:: Thresholding image...
 
-June 5, 2024, 10:29 am|Process line:: Width:30.2346
+June 6, 2024, 2:06 pm|Process line:: --image: image6.png-adaptive.image6.png
 
-June 5, 2024, 10:29 am|Process line:: Height:24.3947
+June 6, 2024, 2:06 pm|Process line:: Morphing image...
 
-June 5, 2024, 10:29 am|Process line:: Grayscaling image...
+June 6, 2024, 2:06 pm|Process line:: --image: image6.png-morphed.image6.png
 
-June 5, 2024, 10:29 am|Process line:: --image: multicol2 (1)-gray.png
+June 6, 2024, 2:06 pm|Process line:: Removing straight lines from image...
 
-June 5, 2024, 10:29 am|Process line:: Thresholding image...
+June 6, 2024, 2:06 pm|Process line:: --image: image6.png-horizontal_lines.image6.png
 
-June 5, 2024, 10:29 am|Process line:: --image: multicol2 (1)-adaptive.png
+June 6, 2024, 2:06 pm|Process line:: --image: image6.png-vertical_lines.image6.png
 
-June 5, 2024, 10:29 am|Process line:: Morphing image...
+June 6, 2024, 2:06 pm|Process line:: --image: image6.png-removed_lines.image6.png
 
-June 5, 2024, 10:29 am|Process line:: --image: multicol2 (1)-morphed.png
+June 6, 2024, 2:06 pm|Process line:: Deskewing image...
 
-June 5, 2024, 10:29 am|Process line:: Removing straight lines from image...
+June 6, 2024, 2:06 pm|ERROR: 
+June 6, 2024, 2:06 pm|Process line:: 4000--- 2250
 
-June 5, 2024, 10:29 am|Process line:: --image: multicol2 (1)-horizontal_lines.png
+June 6, 2024, 2:06 pm|Process line:: OCR-ing
 
-June 5, 2024, 10:29 am|Process line:: --image: multicol2 (1)-vertical_lines.png
+June 6, 2024, 2:06 pm|ERROR: 
+June 6, 2024, 2:06 pm|ERROR: 
+June 6, 2024, 2:06 pm|ERROR: 
+June 6, 2024, 2:06 pm|ERROR: 
+June 6, 2024, 2:06 pm|ERROR: 
+June 6, 2024, 2:06 pm|ERROR: 
+June 6, 2024, 2:07 pm|ERROR: 
+June 6, 2024, 2:07 pm|ERROR: 
+June 6, 2024, 2:07 pm|ERROR: 
+June 6, 2024, 2:07 pm|ERROR: 
+June 6, 2024, 2:07 pm|ERROR: 
+June 6, 2024, 2:07 pm|ERROR: 
+June 6, 2024, 2:07 pm|ERROR: 
+June 6, 2024, 2:07 pm|ERROR: 
+June 6, 2024, 2:07 pm|ERROR: 
+June 6, 2024, 2:07 pm|Process line:: --image: image6.png-analyse_regions_filled.image6.png
 
-June 5, 2024, 10:29 am|Process line:: --image: multicol2 (1)-removed_lines.png
-
-June 5, 2024, 10:29 am|Process line:: Deskewing image...
-
-June 5, 2024, 10:29 am|Process line:: --image: multicol2 (1)-deskewd.png
-
-June 5, 2024, 10:29 am|Process line:: Skew angel:0
-
-June 5, 2024, 10:29 am|Process line:: --image: multicol2 (1)-analyse_result.png
-
-June 5, 2024, 10:29 am|Process line:: --image: multicol2 (1)-analyse_regions_filled.png
-
-June 5, 2024, 10:29 am|Process line:: Script has finished!
+June 6, 2024, 2:07 pm|Process line:: Script has finished!
 

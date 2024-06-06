@@ -1,10 +1,10 @@
-// g++ ocr.cpp `pkg-config opencv4 --cflags --libs` -I/usr/local/include/opencv4 -L/usr/local/lib64 -llept -ltesseract -o ocr
+// g++ ocr.cpp `pkg-config opencv4 --cflags --libs` -I/usr/local/include/opencv4 -L/usr/local/lib64 -llept -ltesseract -o ocr -ljsoncpp
 
 #include <opencv4/opencv2/opencv.hpp>
 #include <tesseract/baseapi.h>
 #include <leptonica/allheaders.h>
 #include <unistd.h>
-#include<fstream>
+#include <fstream>
 #include <tesseract/renderer.h>
 // sudo apt-get install libjsoncpp-dev
 
@@ -57,8 +57,8 @@ int main( int argc, char* argv[])
     app.scale_image(image);
 
 
-    app.original_height = image.rows;
-    app.original_width = image.cols;
+    app.img_height = image.rows;
+    app.img_width = image.cols;
 
 
     //convert to gray scale in order to threshold 
@@ -74,38 +74,22 @@ int main( int argc, char* argv[])
     // cv::Mat removed_lines = app.remove_straight_lines3(adaptive);
 
     cv::Mat removed_lines = app.remove_straight_lines(morphed, app.avg_width, app.avg_height);
-
     cv::Mat deskewd = app.deskew_image(removed_lines);
 
-    vector<vector<Point>> contours = app.analyse_layout_get_contours();
+    app.find_regions_extract_text();
 
+    // Json::Value text_blocks = app.create_blocks_json(contours);
 
+    // Json::Value text_blocks = app.ocr_image(contours);
 
+    // Json::StyledWriter writer;
 
+    // ofstream jsonResult;
+    // jsonResult.open("results.json");
 
-    // char *outText;
-
-
-    // tesseract::TessBaseAPI *api = new tesseract::TessBaseAPI();
-    // // Initialize tesseract-ocr with English, without specifying tessdata path
-    // if (api->Init(NULL, "eng")) {
-    //     fprintf(stderr, "Could not initialize tesseract.\n");
-    //     exit(1);
-    // }
-
-    // // Open input image with leptonica library
-    // Pix *img = pixRead(image_path.c_str());
-    // api->SetImage(img);
-    // // Get OCR result
-    // outText = api->GetUTF8Text();
-    // printf("OCR output:\n%s", outText);
-
-    // // Destroy used object and release memory
-    // api->End();
-    // delete api;
-    // delete [] outText;
-    // pixDestroy(&img);
-
+    // jsonResult << writer.write(text_blocks) << endl;
+    
+    // jsonResult.close();
 
     cout << "Script has finished!" << endl;    
     return 0;

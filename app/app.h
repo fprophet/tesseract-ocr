@@ -22,9 +22,11 @@ struct application{
 
 	bool testing  = false;
 
-    int original_width;
+	string dpi = "";
 
-    int original_height;
+	string size;
+
+    int img_width, img_height;
 
 	float avg_height,avg_width;
 
@@ -39,17 +41,31 @@ struct application{
                 this->image = argv[i + 1];
             }
 
+			if( this->argument_exists("--dpi",i,argc,argv) ){
+				this->dpi = argv[i+1];
+			}
+
+			if( this->argument_exists("--size",i,argc,argv) ){
+				this->size = argv[i+1];
+			}
+
             if ( this->argument_exists("--debugging", i, argc, argv) ){
                 this->debugging = true;
             }
 
-			 if ( this->argument_exists("--testing", i, argc, argv) ){
+			if ( this->argument_exists("--testing", i, argc, argv) ){
                 this->testing = true;
                 this->image = "test.jpg";
             }
         }            
 
         cout << "Arguments parsed!" << endl;   
+		if( this->debugging ){
+			cout << "Arguments:" << endl;
+			cout << "DPI: " << this->dpi << endl;
+			cout << "Size: " << this->size << " MB" << endl;
+
+		}
     }
 
     bool argument_exists(string arg, int i, int argc, char ** argv){
@@ -71,9 +87,9 @@ struct application{
     }
 
     
-    vector<string> explode_name( string to_explode){
+    vector<string> explode( string to_explode, string separator){
 		string name,type;
-		int pos = to_explode.find_last_of(".");
+		int pos = to_explode.find_last_of(separator);
 		type = to_explode.substr(pos+1);
 		name = to_explode.substr(0,pos);
 		vector<string> full_name;
@@ -83,7 +99,7 @@ struct application{
 	}
 
     void write_image(string new_name, cv::Mat &img){
-        vector<string> exploded = this->explode_name(this->image);
+        vector<string> exploded = this->explode(this->image,"-");
 
         string save_name = exploded[0] + "-" + new_name + "." + exploded[1];
 
@@ -95,6 +111,18 @@ struct application{
     }
 
 	void scale_image( Mat &img){
+
+		double dpi = atof(this->explode( this->dpi,"x")[0].c_str());
+		double size = atof(this->size.c_str());
+
+		if( dpi >= 200 ){
+			return;
+		}
+
+		if( size > 1.5 ){
+			this->dpi = "300";
+			return;
+		}
 
 		if( this->debugging ){
 			cout << "Resizing image..." << endl;
@@ -122,7 +150,7 @@ struct application{
             this->write_image("resized", img);
         }
 
-        vector<string>  name_exploded = this->explode_name(this->image);
+        vector<string>  name_exploded = this->explode(this->image,"-");
 
 		if( this->testing ){
 			IMAGE_PATH = PROCESSED_DIR + "/" + name_exploded[0] + "-resized." + name_exploded[1] ;
@@ -448,15 +476,11 @@ struct application{
 		return img;
 	}
 
-	vector<vector<Point>> analyse_layout_get_contours(){
-		vector<vector<Point>> result;
-		vector<Vec4i> hierarchy;
+	void find_regions_extract_text(){
 
-        vector<string>  name_exploded = this->explode_name(this->image);
+        vector<string>  name_exploded = this->explode(this->image,"-");
 		string name = PROCESSED_DIR + "/" + name_exploded[0] + "-removed_lines." + name_exploded[1];
 		
-		Mat analyse_res = imread(name.c_str()), 
-		regions_filled = Mat::zeros(analyse_res.size(),analyse_res.type());
 
 		Pix *image = pixRead(name.c_str());
 		int  left, right, top, bottom;
@@ -464,79 +488,151 @@ struct application{
 		Pixa * pixaImg = pixaCreate(0);
 		pixaAddPix(pixaImg, image, L_CLONE);
 		
-		tesseract::TessBaseAPI *analyse;
-		analyse = new tesseract::TessBaseAPI;
-		analyse->SetVariable("user_defined_dpi", "200");
+		tesseract::TessBaseAPI *ocrAPI;
+		ocrAPI = new tesseract::TessBaseAPI;
+		ocrAPI->SetVariable("user_defined_dpi", this->dpi.c_str());
+		ocrAPI->SetVariable("preserve_interword_spaces", "true");
 
 		PageIteratorLevel line_level = RIL_BLOCK;
 		
-		analyse->InitForAnalysePage();
-		analyse->SetImage(image);
-		analyse->SetPageSegMode(tesseract::PSM_AUTO);
+		// analyse->InitForAnalysePage();
+		ocrAPI->Init(TESS_DATA.c_str(),"ron") ;
+		ocrAPI->SetImage(image);
+		ocrAPI->SetPageSegMode(tesseract::PSM_AUTO);
 
-		PageIterator* pi = analyse->AnalyseLayout(true);
+		PageIterator* pi = ocrAPI->AnalyseLayout(true);
 
-		do{
-			Pix * found_block = pi->GetBinaryImage(line_level);
+  		this->ocr(ocrAPI, pixaImg);
 
-			PolyBlockType blk =  pi->BlockType();
+		ocrAPI->End();
 
-			found = pi->BoundingBox(line_level,&left,&top,&right,&bottom);
+	}
 
-			if( found && (blk == PT_HORZ_LINE  || blk == PT_VERT_LINE )){
-				Rect rect = Rect(left,top,right,bottom);
-				rectangle(analyse_res, rect, Scalar(0,255,0),1);
-			}
-                     
+	void ocr(TessBaseAPI *&api, Pixa *&pixaImg ){
+		Mat regions_filled = Mat::zeros(this->img_height,this->img_width,0);
 
-		}while(pi->Next(line_level));
+		cout << "OCR-ing" << endl;
+
+		ofstream myfile("res.txt");
+		if (!myfile.is_open()){
+			cout << "Could not open file!" << endl;
+		}
+
+		tesseract::PageIteratorLevel level = tesseract::RIL_TEXTLINE;
 
 
-		if( WRITE_IMAGES){
-            this->write_image("analyse_result", analyse_res);
-        }
-
-		Boxa * boxes = analyse->GetRegions(&pixaImg);
+		Boxa * boxes = api->GetRegions(&pixaImg);
 		for( int i = 0; i < boxes->n; i++){
 			BOX *box = boxaGetBox(boxes,i, L_CLONE);
 			cv::Rect roi(box->x, box->y, box->w, box->h);
+				api->SetRectangle(box->x, box->y, box->w, box->h);
+				api->Recognize(0);
+
+				tesseract::ResultIterator* ri = api->GetIterator();
+
+				do{
+					const char* line_of_text = ri->GetUTF8Text(level);
+					if( line_of_text != NULL && line_of_text != ""){
+						myfile << line_of_text <<  endl;
+					}
+
+				}while(ri->Next(level));
+
 			cv::rectangle(regions_filled, roi, cv::Scalar(255, 255, 255), -1);
-			
+			// if( WRITE_IMAGES){
+            // 	this->write_image("analyse_regions_filled", regions_filled);
+        	// }
 		}
-	
-		// cvtColor(regions_filled,regions_filled,COLOR_BGR2GRAY);
 
 		if( WRITE_IMAGES){
             this->write_image("analyse_regions_filled", regions_filled);
         }
-		cvtColor(regions_filled,regions_filled,COLOR_BGR2GRAY);
 
-		findContours(regions_filled, result, hierarchy, RETR_CCOMP , CHAIN_APPROX_SIMPLE, Point(0, 0));
-
-		analyse_res.release();
+		myfile.close();
 		regions_filled.release();
-		analyse->End();
-		return result;
 
 	}
 
-	Json::Value create_blocks_json( vector<vector<Point>>){
+	Json::Value ocr_image( vector<vector<Point>> contours){
+
+		vector<string>  name_exploded = this->explode(this->image,"-");
+		string pix_path = PROCESSED_DIR + "/" + name_exploded[0] + "-adaptive." + name_exploded[1];
+		Pix *pixImg = pixRead(pix_path.c_str());
+		Json::Value text_blocks;
+
+		tesseract::TessBaseAPI *ocrApi;
+		ocrApi = new tesseract::TessBaseAPI;
+				if ( ocrApi->Init(TESS_DATA.c_str(),"ron")  ) {
+		fprintf(stderr, "Could not init ocr api");
+		}
+
+	 	ocrApi->SetImage(pixImg);
+		ocrApi->SetVariable("preserve_interword_spaces", "true");
+		ocrApi->SetVariable("user_defined_dpi","300");
+		ocrApi->SetPageSegMode(tesseract::PSM_SINGLE_BLOCK);
+
+
+  		tesseract::PageIteratorLevel line_level = tesseract::RIL_TEXTLINE;
+		tesseract::PageIteratorLevel symbol_level = tesseract::RIL_SYMBOL;
+  		// tesseract::PageIteratorLevel line_level = tesseract::RIL_SYMBOL;
+
+		
+ofstream myfile("res.txt");
+		   if (!myfile.is_open())
+			{
+				cout << "Could not open file!" << endl;
+			}
 		for(int idx = 0; idx < contours.size(); idx++){
 			Rect rect = boundingRect(contours[idx]);
-			//  cout << rect.x << endl << rect.y << endl << rect.width << endl << rect.height << endl;
-			
-			cv::Rect roi(rect.x,rect.y,rect.width,rect.height);
-			cv::Mat roi_img = img(roi);			
-			detected_block[idx]["x"] 		= rect.x;
-			detected_block[idx]["y"] 		= rect.y;
-			detected_block[idx]["width"] 	= rect.width;
-			detected_block[idx]["height"] = rect.height;
-			detected_block[idx]["id"] = idx;
 
-			// drawContours(img, contours, idx, 1, (0,255,0),1, hierarchy);
+			//create json item
+			text_blocks[idx]["x"] 		= rect.x;
+			text_blocks[idx]["y"] 		= rect.y;
+			text_blocks[idx]["width"] 	= rect.width;
+			text_blocks[idx]["height"] = rect.height;
+			text_blocks[idx]["id"] = idx;
+
+
+			ocrApi->SetRectangle(rect.x, rect.y, rect.width, rect.height);		
+			ocrApi->Recognize(0);
+
+			tesseract::ResultIterator* ri = ocrApi->GetIterator();
+			tesseract::ResultIterator* riSym = ocrApi->GetIterator();
+
+			int line_c = 0;
+			do {
+
+
+				const char* line_of_text = ri->GetUTF8Text(line_level);
+				float conf = ri->Confidence(line_level);
+				if( line_of_text != NULL && line_of_text != ""){
+
+					myfile << line_of_text <<  endl;
+						
+			
+					text_blocks[idx]["lines"]["line_" + to_string(line_c)]["text"] = line_of_text;
+						//paragraph Information
+					tesseract::ParagraphJustification just;
+					bool is_list, is_crown;
+					int first_line_indent;
+					ri->ParagraphInfo(&just, &is_list, &is_crown, &first_line_indent);	        
+
+					// text_blocks[idx]["lines"]["text"]["text_lines"]["line_" + to_string(line_c)] = line_of_text;
+					// int x, y, width_line, height_line, symbol_c = 0;
+					// ri->BoundingBox(line_level, &x, &y, &width_line, &height_line);
+			
+					line_c++;
+				}
+
+			}while(ri->Next(line_level));	
+		
 		}
+	myfile.close();
+		ocrApi->End();
+		cout << "Done OCR!" << endl;
+		return  text_blocks;
 	}
 
-
+	  
 
 };
