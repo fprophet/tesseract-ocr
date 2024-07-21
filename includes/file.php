@@ -44,6 +44,7 @@ class File{
         return round(filesize($file) * 0.000001, 2);
     }
 
+    
 }
 
 ?>

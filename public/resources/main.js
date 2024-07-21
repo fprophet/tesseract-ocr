@@ -40,6 +40,13 @@ function pageEvents() {
   if (close_modal) {
     close_modal.addEventListener("click", _handleCloseModal);
   }
+
+  const boxes = $("input[type=checkbox]", true);
+  if (boxes) {
+    boxes.forEach(function (bx) {
+      bx.addEventListener("click", _handleBoxClick);
+    });
+  }
 }
 
 function checkFileInput() {
@@ -61,10 +68,10 @@ function uploadRequest() {
   });
 }
 
-function processRequest(file) {
+function processRequest(payload) {
   return fetch("/ocr.php", {
     method: "POST",
-    body: JSON.stringify({ file: file }),
+    body: JSON.stringify(payload),
   });
 }
 
@@ -82,6 +89,14 @@ function _toggleOptions() {
     wrapper.style.maxHeight = "300px";
   } else {
     wrapper.style.maxHeight = "0px";
+  }
+}
+
+function _handleBoxClick(event) {
+  if (event.target.hasAttribute("checked")) {
+    event.target.removeAttribute("checked");
+  } else {
+    event.target.setAttribute("checked", "checked");
   }
 }
 
@@ -114,6 +129,20 @@ function _handleFileUpload(event) {
   $(".preview-name").innerHTML = `Your file: <b>${files[0].name}</b>`;
 }
 
+function getPayload() {
+  let payload = {};
+  payload.language = $("#language").value;
+  if ($("#write_images").hasAttribute("checked")) {
+    payload.write_images = true;
+  }
+  if ($("#debugging").hasAttribute("checked")) {
+    payload.debugging = true;
+  }
+  payload.download = $("#type").value;
+
+  return payload;
+}
+
 function _handleStartProcess() {
   if (!checkFileInput()) {
     window.alert("Please select a file first!");
@@ -129,15 +158,27 @@ function _handleStartProcess() {
       if (res.status == "success") {
         interval = true;
         updateData();
-        processRequest(res.file)
+        const payload = getPayload();
+        payload.file = res.file;
+        processRequest(payload)
           .then((res) => res.json())
           .then((res) => {
             interval = false;
             loading(false);
+            if (res["link"]) {
+              createDownloadLink(res["link"]);
+            }
           });
         // console.log(res);
       }
     });
+}
+
+function createDownloadLink(link) {
+  const a = document.createElement("a");
+  a.href = link;
+  a.innerHTML = link;
+  $(".file-input-wrapper").appendChild(a);
 }
 
 function udpateDatax() {
@@ -185,6 +226,7 @@ function updateData() {
             continue;
           }
           $("#output-text").innerHTML += res["data"][i] + " <br>";
+          $("#output-text").scrollTop = $("#output-text").scrollHeight;
           if (res["data"][i].indexOf("--image:") > -1) {
             let image = res["data"][i].split(":")[1].trim();
             displayImage(image);

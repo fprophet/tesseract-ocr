@@ -378,3 +378,21 @@ footer {
     transform: rotate(360deg);
   }
 }
+.buttons-wrapper {
+  display: flex;
+  width: 70%;
+  justify-content: space-around;
+}
+.language-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  font-size: 19px;
+}
+
+.type-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  font-size: 19px;
+}

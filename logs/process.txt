@@ -1,64 +1,63 @@
-June 6, 2024, 2:06 pm|Process line:: Arguments parsed!
+July 13, 2024, 12:58 pm|Process line:: Parsing arguments...
 
-June 6, 2024, 2:06 pm|Process line:: Arguments:
+July 13, 2024, 12:58 pm|Process line:: Arguments parsed!
 
-June 6, 2024, 2:06 pm|Process line:: DPI: 72x72
+July 13, 2024, 12:58 pm|Process line:: Arguments:
 
-June 6, 2024, 2:06 pm|Process line:: Size: 3.19 MB
+July 13, 2024, 12:58 pm|Process line:: DPI: 300x300
 
-June 6, 2024, 2:06 pm|Process line:: Rendering text box...
+July 13, 2024, 12:58 pm|Process line:: Size: 0.13 MB
 
-June 6, 2024, 2:06 pm|ERROR: 
-June 6, 2024, 2:06 pm|ERROR: 
-June 6, 2024, 2:06 pm|Process line:: Calcuating avg width and height for found characters...
+July 13, 2024, 12:58 pm|Process line:: Language: eng
 
-June 6, 2024, 2:06 pm|Process line:: Average width:24.1441
+July 13, 2024, 12:58 pm|Process line:: Image width: 1600
 
-June 6, 2024, 2:06 pm|Process line:: Average height:31.526
+July 13, 2024, 12:58 pm|Process line:: Image height: 900
 
-June 6, 2024, 2:06 pm|Process line:: Grayscaling image...
+July 13, 2024, 12:58 pm|Process line:: Grayscaling image...
 
-June 6, 2024, 2:06 pm|Process line:: --image: image6.png-gray.image6.png
+July 13, 2024, 12:58 pm|Process line:: --image: gray
 
-June 6, 2024, 2:06 pm|Process line:: Thresholding image...
+July 13, 2024, 12:58 pm|Process line:: Thresholding image...
 
-June 6, 2024, 2:06 pm|Process line:: --image: image6.png-adaptive.image6.png
+July 13, 2024, 12:58 pm|Process line:: --image: adaptive
 
-June 6, 2024, 2:06 pm|Process line:: Morphing image...
+July 13, 2024, 12:58 pm|Process line:: Finding orentation...
 
-June 6, 2024, 2:06 pm|Process line:: --image: image6.png-morphed.image6.png
+July 13, 2024, 12:58 pm|ERROR: 
+July 13, 2024, 12:58 pm|Process line:: Orientation in degrees: 0
 
-June 6, 2024, 2:06 pm|Process line:: Removing straight lines from image...
+July 13, 2024, 12:58 pm|Process line::  Orientation confidence: 4.10
 
-June 6, 2024, 2:06 pm|Process line:: --image: image6.png-horizontal_lines.image6.png
+July 13, 2024, 12:58 pm|Process line:: --image: reoriented
 
-June 6, 2024, 2:06 pm|Process line:: --image: image6.png-vertical_lines.image6.png
+July 13, 2024, 12:58 pm|Process line:: Creating text image...
 
-June 6, 2024, 2:06 pm|Process line:: --image: image6.png-removed_lines.image6.png
+July 13, 2024, 12:58 pm|ERROR: 
+July 13, 2024, 12:58 pm|Process line:: --image: text_image
 
-June 6, 2024, 2:06 pm|Process line:: Deskewing image...
+July 13, 2024, 12:58 pm|Process line:: Calculating skew angle..
 
-June 6, 2024, 2:06 pm|ERROR: 
-June 6, 2024, 2:06 pm|Process line:: 4000--- 2250
+July 13, 2024, 12:58 pm|Process line:: Skew angel:1
 
-June 6, 2024, 2:06 pm|Process line:: OCR-ing
+July 13, 2024, 12:58 pm|Process line:: --image: deskewed
 
-June 6, 2024, 2:06 pm|ERROR: 
-June 6, 2024, 2:06 pm|ERROR: 
-June 6, 2024, 2:06 pm|ERROR: 
-June 6, 2024, 2:06 pm|ERROR: 
-June 6, 2024, 2:06 pm|ERROR: 
-June 6, 2024, 2:06 pm|ERROR: 
-June 6, 2024, 2:07 pm|ERROR: 
-June 6, 2024, 2:07 pm|ERROR: 
-June 6, 2024, 2:07 pm|ERROR: 
-June 6, 2024, 2:07 pm|ERROR: 
-June 6, 2024, 2:07 pm|ERROR: 
-June 6, 2024, 2:07 pm|ERROR: 
-June 6, 2024, 2:07 pm|ERROR: 
-June 6, 2024, 2:07 pm|ERROR: 
-June 6, 2024, 2:07 pm|ERROR: 
-June 6, 2024, 2:07 pm|Process line:: --image: image6.png-analyse_regions_filled.image6.png
+July 13, 2024, 12:58 pm|Process line:: Finding text regions...
 
-June 6, 2024, 2:07 pm|Process line:: Script has finished!
+July 13, 2024, 12:58 pm|ERROR: 
+July 13, 2024, 12:58 pm|Process line:: --image: text_regions
+
+July 13, 2024, 12:58 pm|Process line:: OCR-ing...
+
+July 13, 2024, 12:58 pm|ERROR: 
+July 13, 2024, 12:58 pm|ERROR: 
+July 13, 2024, 12:58 pm|ERROR: 
+July 13, 2024, 12:58 pm|ERROR: 
+July 13, 2024, 12:58 pm|Process line:: --image: analyse_regions_filled
+
+July 13, 2024, 12:58 pm|Process line:: --image: deskewed
+
+July 13, 2024, 12:58 pm|Process line:: --image: original
+
+July 13, 2024, 12:58 pm|Process line:: Finished!
 

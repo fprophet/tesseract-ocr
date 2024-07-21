@@ -64,10 +64,14 @@ class Process{
                     $this->output_file->addEntry("ERROR", $current);
                     update_session("process",$err);
                 }
+
+                if($current == "Finished!"){
+                    $this->return_message = $current;
+                }
+                
                 $arr = proc_get_status($this->process);
             }while($arr["running"]);
 
-            $this->return_message = fgets($this->pipes[1], 1024);
             fclose($this->pipes[0]);
             $this->output = stream_get_contents($this->pipes[1]);
             $message = "\nCommand: " . $this->command . " \n\nResponse\n";

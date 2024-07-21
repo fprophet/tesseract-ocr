@@ -15,7 +15,6 @@
 using namespace std;
 
 
-
 int main( int argc, char* argv[])
 {
     application app;
@@ -25,7 +24,6 @@ int main( int argc, char* argv[])
         cout << "ERROR: File path is missing! Exiting!" << endl;
         return 0;
     }
-
     
     if( app.testing ){
         IMAGE_PATH = APP_PATH + "/" + app.image;
@@ -33,14 +31,8 @@ int main( int argc, char* argv[])
         IMAGE_PATH = IMAGE_DIR + "/" + app.image;
     }
 
-    if( app.debugging ){
-        // WRITE_IMAGES = true;
-    }
-
-
-
-    cv::Mat image = cv::imread(IMAGE_PATH);
-
+    Mat image = imread(IMAGE_PATH);
+    
     if( image.empty()){
         cout << "ERROR: Image could not be read!" << endl;
         cout << "Path to image: " << IMAGE_PATH << endl;
@@ -49,48 +41,51 @@ int main( int argc, char* argv[])
         return 0;
     }
 
-    
-    app.render_text_box();
-
-    app.avg_char_size();
-
-    app.scale_image(image);
-
-
     app.img_height = image.rows;
     app.img_width = image.cols;
 
+    if( app.debugging ){
+        cout << "Image width: " << app.img_height  << endl;
+        cout << "Image height: " << app.img_width  << endl;
+    }
+
+    //scale image if necessary
+    app.scale_image(image);
+    Mat orig = image;
+
+    Json::Value json;
+    json["document"]["width"] = image.cols;
+    json["document"]["height"] = image.rows;
+    json["document"]["dpi"] = app.dpi;
 
     //convert to gray scale in order to threshold 
-    cv::Mat gray = app.gray_scale(image);
+    app.gray_scale(image);
 
     //thershold the image for further pre processing
-    cv::Mat adaptive = app.threshold(gray);
+    app.threshold(image);
 
-    //remove noise like small dots using morphology close
-    cv::Mat morphed = app.morph(adaptive);
+    //deskew image
+    //find text orientation
+    int orient = app.find_text_orientation(image);
+    //create text image find the skew angle
+    Mat text_image = app.create_text_image(image);
+    //find the angle of the new Mat
+    double angle = app.calculate_angle(text_image);
+    app.deskew(image, angle);
 
+    TessBaseAPI *api = app.init_api(image);
 
-    // cv::Mat removed_lines = app.remove_straight_lines3(adaptive);
+    app.remove_non_text_regions(api, image,json);
+    app.ocr(api, image, json);
+    // app.remove_straight_lines(image, app.avg_width, app.avg_height);
 
-    cv::Mat removed_lines = app.remove_straight_lines(morphed, app.avg_width, app.avg_height);
-    cv::Mat deskewd = app.deskew_image(removed_lines);
+    api->End();
 
-    app.find_regions_extract_text();
+    if( app.debugging ){
+        app.display_original(orig,orient,angle, json);
+    }
 
-    // Json::Value text_blocks = app.create_blocks_json(contours);
-
-    // Json::Value text_blocks = app.ocr_image(contours);
-
-    // Json::StyledWriter writer;
-
-    // ofstream jsonResult;
-    // jsonResult.open("results.json");
-
-    // jsonResult << writer.write(text_blocks) << endl;
-    
-    // jsonResult.close();
-
-    cout << "Script has finished!" << endl;    
+    app.write_json(json);
+   
     return 0;
 }
